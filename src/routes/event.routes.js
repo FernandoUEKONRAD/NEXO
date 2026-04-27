@@ -41,3 +41,14 @@ router.put("/:id", verifyToken, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+router.delete("/:id", verifyToken, async (req, res) => {
+  try {
+    await Event.findByIdAndDelete(req.params.id);
+    res.json({ msg: "Evento eliminado" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+module.exports = router;
