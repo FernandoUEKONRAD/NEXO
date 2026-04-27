@@ -1,54 +1,6 @@
-const express = require("express");
-const router = express.Router();
-const Event = require("../models/Event");
-const verifyToken = require("./validate_token");
+const router = require("express").Router();
+const { controllers, auth, role } = require("../index");
 
-router.post("/", verifyToken, async (req, res) => {
-  try {
-    const event = await Event.create(req.body);
-    res.status(201).json(event);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-router.get("/", verifyToken, async (req, res) => {
-  try {
-    const { user, community } = req.query;
-
-    let filtro = {};
-
-    if (user) filtro.asistentes = user;
-    if (community) filtro.comunidad = community;
-
-    const eventos = await Event.find(filtro);
-    res.json(eventos);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.put("/:id", verifyToken, async (req, res) => {
-  try {
-    const actualizado = await Event.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-
-    res.json(actualizado);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-router.delete("/:id", verifyToken, async (req, res) => {
-  try {
-    await Event.findByIdAndDelete(req.params.id);
-    res.json({ msg: "Evento eliminado" });
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
+router.get("/", auth, role("admin"), controllers.userController.getAll);
 
 module.exports = router;

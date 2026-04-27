@@ -1,15 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/authController');
+const router = require("express").Router();
+const { controllers } = require("../index");
 
-// Registro y Login
-router.post('/register', authController.register);
-router.post('/login', authController.login);
-
-// CRUD de Usuarios
-router.get('/users', authController.obtenerUsuarios); // Consultar todos
-router.delete('/users/:id', authController.eliminarUsuario); // <--- ESTA ES LA RUTA
-// Ruta para actualizar usuario por ID
-router.put('/users/:id', authController.actualizarUsuario);
+router.post("/register", controllers.authController.register);
+router.post("/login", controllers.authController.login);
 
 module.exports = router;
