@@ -11,3 +11,19 @@ router.post("/", verifyToken, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+router.get("/", verifyToken, async (req, res) => {
+  try {
+    const { user, community } = req.query;
+
+    let filtro = {};
+
+    if (user) filtro.asistentes = user;
+    if (community) filtro.comunidad = community;
+
+    const eventos = await Event.find(filtro);
+    res.json(eventos);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
