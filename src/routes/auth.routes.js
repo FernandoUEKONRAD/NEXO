@@ -1,16 +1,15 @@
 const express = require('express');
 const router = express.Router();
-
-// CAMBIO: Quitamos el punto para que diga authController
 const authController = require('../controllers/authController');
 
-// Registro de usuario - Ahora llama a la función del controlador
+// Registro y Login
 router.post('/register', authController.register);
-
-// Login - Ahora llama a la función del controlador
 router.post('/login', authController.login);
 
-// Ruta para consultar usuarios
-router.get('/users', authController.obtenerUsuarios);
+// CRUD de Usuarios
+router.get('/users', authController.obtenerUsuarios); // Consultar todos
+router.delete('/users/:id', authController.eliminarUsuario); // <--- ESTA ES LA RUTA
+// Ruta para actualizar usuario por ID
+router.put('/users/:id', authController.actualizarUsuario);
 
 module.exports = router;
