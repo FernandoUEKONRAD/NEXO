@@ -1,6 +1,10 @@
 const router = require("express").Router();
-const { controllers, auth, role } = require("../index");
+const { controllers, auth } = require("../index");
 
-router.get("/", auth, role("admin"), controllers.userController.getAll);
+router.post("/", auth, controllers.eventController.create);
+router.get("/", controllers.eventController.getAll);
+router.get("/:id", controllers.eventController.getById);
+router.put("/:id", auth, controllers.eventController.update);
+router.delete("/:id", auth, controllers.eventController.delete);
 
 module.exports = router;
