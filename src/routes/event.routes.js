@@ -2,3 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Event = require("../models/Event");
 const verifyToken = require("./validate_token");
+
+router.post("/", verifyToken, async (req, res) => {
+  try {
+    const event = await Event.create(req.body);
+    res.status(201).json(event);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
