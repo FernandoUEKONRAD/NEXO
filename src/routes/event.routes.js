@@ -27,3 +27,17 @@ router.get("/", verifyToken, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.put("/:id", verifyToken, async (req, res) => {
+  try {
+    const actualizado = await Event.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(actualizado);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
