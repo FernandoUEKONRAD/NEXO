@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const eventSchema = new mongoose.Schema({
   titulo: {
     type: String,
@@ -21,3 +23,5 @@ const eventSchema = new mongoose.Schema({
     ref: "Community"
   }
 }, { timestamps: true });
+
+module.exports = mongoose.model("Event", eventSchema);
