@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-// Aquí importarás el controlador de auth cuando lo crees
-// const authController = require('../controllers/auth.controller');
+const authController = require('../controllers/auth.controller'); // Descomenta esto
 
-// Registro de usuario
-router.post('/register', (req, res) => res.send('Registro de usuario'));
+// Registro de usuario - Ahora llama a la función del controlador
+router.post('/register', authController.register);
 
-// Login
-router.post('/login', (req, res) => res.send('Login de usuario'));
+// Login - Ahora llama a la función del controlador
+router.post('/login', authController.login);
 
 module.exports = router;
