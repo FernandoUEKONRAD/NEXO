@@ -1,18 +1,38 @@
-const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, '.env') });
+const express = require("express");
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-console.log("--- DEBUG DE RUTA ---");
-console.log("Buscando .env en:", path.resolve(__dirname, '.env'));
-console.log("MONGO_URI detectada:", process.env.MONGO_URI ? "SÍ ✅" : "NO ❌");
+const app = express();
 
-const app = require('./src/app');
-const connectDB = require('./src/config/db');
+// 🔹 Middleware
+app.use(express.json());
 
+// 🔹 Rutas
+app.use("/api/auth", require("./routes/auth.routes"));
+app.use("/api/events", require("./routes/event.routes"));
+
+// 🔹 Conexión a MongoDB
+mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/reuniones", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log("✅ Conectado a MongoDB"))
+.catch(err => console.error("❌ Error de conexión:", err));
+
+// 🔹 Ruta base (opcional pero útil)
+app.get("/", (req, res) => {
+  res.send("API de Reuniones funcionando 🚀");
+});
+
+// 🔹 Manejo básico de errores
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: "Error interno del servidor" });
+});
+
+// 🔹 Puerto
 const PORT = process.env.PORT || 3000;
 
-// Conectar BD e iniciar servidor
-connectDB().then(() => {
-    app.listen(PORT, () => {
-        console.log(`🚀 Servidor Nexo corriendo en http://localhost:${PORT}`);
-    });
+app.listen(PORT, () => {
+  console.log(`🔥 Servidor corriendo en http://localhost:${PORT}`);
 });
