@@ -1,5 +1,3 @@
-// src/app.js
-// src/app.js
 const express = require('express');
 const cors = require('cors');
 
@@ -8,10 +6,6 @@ const authRoutes = require('./routes/auth.routes');
 const communityRoutes = require('./routes/community.routes'); // <- AGREGAR
 
 const app = express();
-
-// ... resto de tu código (middlewares y app.use)
-
-// ... resto del código
 
 // Middlewares
 app.use(cors());

@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 // 1. REGISTRO
 exports.register = async (req, res) => {
@@ -19,7 +20,26 @@ exports.register = async (req, res) => {
 
 // 2. LOGIN (En desarrollo)
 exports.login = async (req, res) => {
-    res.send('Login funcionando (lógica en desarrollo)');
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ msg: 'Credenciales inválidas' });
+
+        const esValido = await bcrypt.compare(password, user.password);
+        if (!esValido) return res.status(400).json({ msg: 'Credenciales inválidas' });
+
+        const token = jwt.sign(
+            { id: user._id, rol: user.rol },
+            process.env.JWT_SECRET,
+            { expiresIn: '8h' }
+        );
+
+        res.json({ token });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Error al iniciar sesión' });
+    }
 };
 
 // 3. CONSULTAR TODOS LOS USUARIOS
