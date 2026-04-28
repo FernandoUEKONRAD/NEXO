@@ -40,3 +40,25 @@ exports.obtenerEventos = async (req, res) => {
         res.status(500).json({ msg: 'Error al consultar los eventos' });
     }
 };
+
+exports.actualizarEvento = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const datosNuevos = req.body;
+
+        const eventoActualizado = await Event.findByIdAndUpdate(
+            id,
+            datosNuevos,
+            { new: true, runValidators: true }
+        );
+
+        if (!eventoActualizado) {
+            return res.status(404).json({ msg: 'Evento no encontrado' });
+        }
+
+        res.json({ msg: 'Evento actualizado con éxito en Nexo', evento: eventoActualizado });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Error al actualizar el evento' });
+    }
+};
