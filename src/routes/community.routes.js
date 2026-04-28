@@ -6,10 +6,10 @@ const communityController = require('../controllers/communityController');
 router.post('/community', communityController.crearComunidad);
 
 // Listar comunidades
-router.get('/community', communityController.listarComunidades);
+router.get('/community', communityController.obtenerComunidades);
 
 // Editar comunidad
-router.put('/community/:id', communityController.editarComunidad);
+router.put('/community/:id', communityController.actualizarComunidad);
 
 // Eliminar comunidad
 router.delete('/community/:id', communityController.eliminarComunidad);
