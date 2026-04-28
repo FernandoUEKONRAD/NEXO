@@ -62,3 +62,19 @@ exports.actualizarEvento = async (req, res) => {
         res.status(500).json({ msg: 'Error al actualizar el evento' });
     }
 };
+
+exports.eliminarEvento = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const eventoEliminado = await Event.findByIdAndDelete(id);
+
+        if (!eventoEliminado) {
+            return res.status(404).json({ msg: 'Evento no encontrado' });
+        }
+
+        res.json({ msg: 'Evento cancelado y eliminado correctamente' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Error al eliminar el evento' });
+    }
+};
