@@ -21,3 +21,22 @@ exports.crearEvento = async (req, res) => {
         res.status(500).json({ msg: 'Error al crear el evento' });
     }
 };
+
+exports.obtenerEventos = async (req, res) => {
+    try {
+        const { usuarioId, comunidadId } = req.query;
+
+        let filtro = {};
+        if (usuarioId) filtro.asistentes = usuarioId;
+        if (comunidadId) filtro.comunidad = comunidadId;
+
+        const eventos = await Event.find(filtro)
+            .populate('creador', 'nombre email')
+            .populate('asistentes', 'nombre email');
+
+        res.json(eventos);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: 'Error al consultar los eventos' });
+    }
+};
