@@ -2,9 +2,15 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { ButtonComponent } from './components/button/button.component';
+import { ModalComponent } from './components/modal/modal.component';
+import { LoaderComponent } from './components/loader/loader.component';
+
 @NgModule({
   declarations: [
-    // Componentes reutilizables (ButtonComponent, ModalComponent, LoaderComponent, NavbarComponent)
+    ButtonComponent,
+    ModalComponent,
+    LoaderComponent
   ],
   imports: [
     CommonModule,
@@ -14,8 +20,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   exports: [
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
-    // Los componentes reutilizables irán aquí
+    ReactiveFormsModule,
+    ButtonComponent,
+    ModalComponent,
+    LoaderComponent
   ]
 })
 export class SharedModule { }
