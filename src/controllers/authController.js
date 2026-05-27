@@ -5,13 +5,29 @@ const jwt = require('jsonwebtoken');
 // 1. REGISTRO
 exports.register = async (req, res) => {
     try {
-        const { nombre, email, password } = req.body;
-        let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ msg: 'El usuario ya existe' });
+        const { nombre, name, email, password } = req.body;
+        const nombreFinal = nombre || name;
 
-        user = new User({ nombre, email, password });
+        if (!nombreFinal || !email || !password) {
+            return res.status(400).json({ msg: 'Nombre, email y contraseña son requeridos' });
+        }
+
+        let user = await User.findOne({ email });
+        if (user) return res.status(409).json({ msg: 'El usuario ya existe' });
+
+        user = new User({ nombre: nombreFinal, email, password });
         await user.save();
-        res.status(201).json({ msg: 'Usuario registrado con éxito en Nexo' });
+
+        const token = jwt.sign(
+            { id: user._id, rol: user.rol },
+            process.env.JWT_SECRET,
+            { expiresIn: '8h' }
+        );
+
+        res.status(201).json({
+            token,
+            user: { id: user._id, email: user.email, name: user.nombre, role: user.rol }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error al registrar usuario');
@@ -35,7 +51,10 @@ exports.login = async (req, res) => {
             { expiresIn: '8h' }
         );
 
-        res.json({ token });
+        res.json({
+            token,
+            user: { id: user._id, email: user.email, name: user.nombre, role: user.rol }
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Error al iniciar sesión' });
